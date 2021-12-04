@@ -1,0 +1,4 @@
+[submodule "ESKD-kicad-libraries"]
+	path = libraries
+	url = git@github.com:lipro-ecad/ESKD-kicad-libraries.git
+	branch = main

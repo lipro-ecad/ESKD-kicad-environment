@@ -23,7 +23,12 @@ was no longer used and was replaced by the now valid [IEC] and [DIN] standards.
 [Fall of the Berlin Wall]: https://en.wikipedia.org/wiki/Fall_of_the_Berlin_Wall "German: Mauerfall"
 [reunification]: https://en.wikipedia.org/wiki/German_reunification "German: Deutsche Wiedervereinigung"
 
-**The content in this repository are intended for KiCad version 6.x**
+**The content in this repository are intended for KiCad version 6.x**,
+clone with all sub-modules:
+
+```
+git clone --recurse-submodules ...
+```
 
 The follwoing KiCad [online documentaion](https://docs.kicad.org/master/)
 can be useful:
