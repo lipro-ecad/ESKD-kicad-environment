@@ -1,0 +1,6 @@
+{
+  "graphics": {
+    "cairo_antialiasing_mode": 1,
+    "opengl_antialiasing_mode": 2
+  }
+}
