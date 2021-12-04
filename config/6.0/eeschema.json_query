@@ -1,0 +1,28 @@
+{
+  "window": {
+    "cursor": {
+      "always_show_cursor": true,
+      "fullscreen_cursor": false
+    },
+    "grid": {
+      "show": true,
+      "last_size": 0,
+      "fast_grid_1": 0,
+      "fast_grid_2": 3,
+      "sizes": [
+        "100 mil",
+        "50 mil",
+        "25 mil",
+        "10 mil",
+        "5 mil",
+        "2 mil",
+        "1 mil"
+      ],
+      "user_grid_x": "40 mil",
+      "user_grid_y": "40 mil"
+    }
+  },
+  "system": {
+    "units": 5
+  }
+}

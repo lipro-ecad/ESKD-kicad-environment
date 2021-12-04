@@ -1,0 +1,48 @@
+{
+  "corner_origin": 0,
+  "last_paper_size": "A4",
+  "last_was_portrait": true,
+  "window": {
+    "cursor": {
+      "always_show_cursor": true,
+      "fullscreen_cursor": true
+    },
+    "grid": {
+      "show": true,
+      "last_size": 16,
+      "fast_grid_1": 13,
+      "fast_grid_2": 16,
+      "sizes": [
+        "1000 mil",
+        "500 mil",
+        "250 mil",
+        "200 mil",
+        "100 mil",
+        "50 mil",
+        "25 mil",
+        "20 mil",
+        "10 mil",
+        "5 mil",
+        "2 mil",
+        "1 mil",
+        "25.0 mm",
+        "10.0 mm",
+        "5.0 mm",
+        "2.5 mm",
+        "1.0 mm",
+        "0.5 mm",
+        "0.25 mm",
+        "0.2 mm",
+        "0.1 mm",
+        "0.05 mm",
+        "0.025 mm",
+        "0.01 mm"
+      ],
+      "user_grid_x": "50.0 mm",
+      "user_grid_y": "50.0 mm"
+    }
+  },
+  "system": {
+    "units": 1
+  }
+}
