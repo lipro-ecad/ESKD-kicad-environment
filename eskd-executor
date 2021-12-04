@@ -1,0 +1,105 @@
+#!/usr/bin/env -S bash -e
+
+KICAD_VERSION="6.0"
+
+#
+# The MIT License (MIT)
+# Copyright (c) 2021 Li-Pro.Net (Stephan Linz)
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+# DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+# OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+# OR OTHER DEALINGS IN THE SOFTWARE.
+#
+
+SCRIPT_NAME="${0##*/}"
+SCRIPT_PATH="$( cd "${0%/*}" && pwd -P )"
+
+# Looking for helper tools in PATH environment variable.
+JQ="$( type -P "jq" )" || ( \
+       echo "Executable not found: 'jq'" >&2 ; exit 1 )
+MV="$( type -P "mv" )" || ( \
+       echo "Executable not found: 'mv'" >&2 ; exit 1 )
+
+# Looking for selected KiCad executable in PATH environment variable.
+KICAD="$( type -P "${SCRIPT_NAME#eskd-}" )" || ( \
+          echo "Executable not found: '${SCRIPT_NAME}'" >&2 ; exit 1 )
+
+#
+# Additional KiCad environment variables:
+#
+# KICAD_CONFIG_HOME     Base path of KiCad configuration files. Subdirectories
+#                       will be created within this directory for each KiCad
+#                       minor version.
+#
+# KICAD_DOCUMENTS_HOME  Base path of KiCad user-modifiable documents, such
+#                       as templates, Python scripts, libraries, etc.
+#                       Subdirectories will be created within this directory
+#                       for each KiCad minor version.
+#
+# --> https://docs.kicad.org/master/en/kicad/kicad.html#paths_configuration
+#
+export KICAD_CONFIG_HOME="${SCRIPT_PATH}/config"
+export KICAD_DOCUMENTS_HOME="${SCRIPT_PATH}/share"
+
+#
+# (Pre-)set Json configuration data from Json Query templates
+#
+
+KICAD_JSON="${KICAD_CONFIG_HOME}/${KICAD_VERSION}/kicad.json"
+KICAD_COMMON_JSON="${KICAD_CONFIG_HOME}/${KICAD_VERSION}/kicad_common.json"
+PCM_INSTALLED_JSON="${KICAD_CONFIG_HOME}/${KICAD_VERSION}/installed_packages.json"
+
+PAGE_LAYOUT_EDITOR_JSON="${KICAD_CONFIG_HOME}/${KICAD_VERSION}/pl_editor.json"
+BMP2COMP_JSON="${KICAD_CONFIG_HOME}/${KICAD_VERSION}/bitmap2component.json"
+
+SCH_EDITOR_JSON="${KICAD_CONFIG_HOME}/${KICAD_VERSION}/eeschema.json"
+SYMBOL_EDITOR_JSON="${KICAD_CONFIG_HOME}/${KICAD_VERSION}/symbol_editor.json"
+
+PCB_EDITOR_JSON="${KICAD_CONFIG_HOME}/${KICAD_VERSION}/pcbnew.json"
+FOOTPRINT_EDITOR_JSON="${KICAD_CONFIG_HOME}/${KICAD_VERSION}/fpedit.json"
+PCB_CALCULATOR_JSON="${KICAD_CONFIG_HOME}/${KICAD_VERSION}/pcb_calculator.json"
+GERBER_VIEWER_JSON="${KICAD_CONFIG_HOME}/${KICAD_VERSION}/gerbview.json"
+
+for json in "${KICAD_JSON}" \
+            "${KICAD_COMMON_JSON}" \
+            "${PCM_INSTALLED_JSON}" \
+            "${PAGE_LAYOUT_EDITOR_JSON}" \
+            "${BMP2COMP_JSON}" \
+            "${SCH_EDITOR_JSON}" \
+            "${SYMBOL_EDITOR_JSON}" \
+            "${PCB_EDITOR_JSON}" \
+            "${FOOTPRINT_EDITOR_JSON}" \
+            "${PCB_CALCULATOR_JSON}" \
+            "${GERBER_VIEWER_JSON}"; do \
+  if [ -f "${json}" -a -f "${json}_query" ] ; then
+    "${JQ}" -s '.[0] * .[1]' "${json}" "${json}_query" > "${json}_new"
+    "${MV}" "${json}_new" "${json}"
+  elif [ -f "${json}_query" ] ; then
+    "${JQ}" -s '.[0]' "${json}_query" > "${json}"
+  fi
+  if [ ! -f "${json}" ] ; then
+    echo "{}" | "${JQ}" '.' > "${json}"
+  fi
+done
+
+#
+# Execute the selected KiCad executable if found.
+#
+exec "${KICAD}" "${@}" &
+
+# ############################################################################
+# vim: ft=bash ts=2 sw=2 et ai:
