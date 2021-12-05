@@ -33,6 +33,8 @@ JQ="$( type -P "jq" )" || ( \
        echo "Executable not found: 'jq'" >&2 ; exit 1 )
 MV="$( type -P "mv" )" || ( \
        echo "Executable not found: 'mv'" >&2 ; exit 1 )
+RM="$( type -P "rm" )" || ( \
+       echo "Executable not found: 'rm'" >&2 ; exit 1 )
 
 # Looking for selected KiCad executable in PATH environment variable.
 KICAD="$( type -P "${SCRIPT_NAME#eskd-}" )" || ( \
@@ -87,7 +89,7 @@ for json in "${KICAD_JSON}" \
             "${GERBER_VIEWER_JSON}"; do \
   if [ -f "${json}" -a -f "${json}_query" ] ; then
     "${JQ}" -s '.[0] * .[1]' "${json}" "${json}_query" > "${json}_new"
-    "${MV}" "${json}_new" "${json}"
+    "${MV}" -f "${json}_new" "${json}"
   elif [ -f "${json}_query" ] ; then
     "${JQ}" -s '.[0]' "${json}_query" > "${json}"
   fi
@@ -95,6 +97,36 @@ for json in "${KICAD_JSON}" \
     echo "{}" | "${JQ}" '.' > "${json}"
   fi
 done
+
+#
+# (Pre-)set Json configuration data with default environment variables
+#
+
+# NOTE: Do not remove the trailing slash ('/') characters!
+KICAD6_ESKD_SYMBOL_DIR="${SCRIPT_PATH}/libraries/symbols/"
+KICAD6_ESKD_FOOTPRINT_DIR="${SCRIPT_PATH}/libraries/footprints/"
+KICAD6_ESKD_3DMODEL_DIR="${SCRIPT_PATH}/libraries/3dmodels/"
+
+if [ -f "${KICAD_COMMON_JSON}" ] ; then
+  { cat | "${JQ}" -s '.[0]' > "${KICAD_COMMON_JSON}_vars" ; } << EOF
+  {
+    "environment": {
+      "vars": {
+        "KICAD6_ESKD_SYMBOL_DIR": "${KICAD6_ESKD_SYMBOL_DIR}",
+        "KICAD6_ESKD_FOOTPRINT_DIR": "${KICAD6_ESKD_FOOTPRINT_DIR}",
+        "KICAD6_ESKD_3DMODEL_DIR": "${KICAD6_ESKD_3DMODEL_DIR}"
+      }
+    }
+  }
+EOF
+  if [ -f "${KICAD_COMMON_JSON}" -a -f "${KICAD_COMMON_JSON}_vars" ] ; then
+    "${JQ}" -s '.[0] * .[1]' "${KICAD_COMMON_JSON}" \
+                             "${KICAD_COMMON_JSON}_vars" > \
+                             "${KICAD_COMMON_JSON}_new"
+    "${MV}" -f "${KICAD_COMMON_JSON}_new" "${KICAD_COMMON_JSON}"
+  fi
+  "${RM}" -f "${KICAD_COMMON_JSON}_vars"
+fi
 
 #
 # Execute the selected KiCad executable if found.
