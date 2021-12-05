@@ -1,4 +1,7 @@
 {
+  "defaults": {
+    "pin_length": 80
+  },
   "window": {
     "cursor": {
       "always_show_cursor": true,
