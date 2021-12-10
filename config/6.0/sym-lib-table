@@ -203,4 +203,5 @@
   (lib (name "Valve")(type "KiCad")(uri "${KICAD6_SYMBOL_DIR}/Valve.kicad_sym")(options "")(descr "Valve symbols")(disabled))
   (lib (name "Video")(type "KiCad")(uri "${KICAD6_SYMBOL_DIR}/Video.kicad_sym")(options "")(descr "Video symbols")(disabled))
   (lib (name "Construction_ESKD")(type "KiCad")(uri "${KICAD6_ESKD_SYMBOL_DIR}/Construction_ESKD.kicad_sym")(options "")(descr "ESKD Engineering symbols, signs and tokens"))
+  (lib (name "Device_ESKD")(type "KiCad")(uri "${KICAD6_ESKD_SYMBOL_DIR}/Device_ESKD.kicad_sym")(options "")(descr "ESKD Generic symbols for common devices"))
 )
