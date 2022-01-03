@@ -103,6 +103,7 @@ done
 #
 
 # NOTE: Do not remove the trailing slash ('/') characters!
+KICAD6_ESKD_WORKSHEET_DIR="${SCRIPT_PATH}/templates/worksheets/"
 KICAD6_ESKD_SYMBOL_DIR="${SCRIPT_PATH}/libraries/symbols/"
 KICAD6_ESKD_FOOTPRINT_DIR="${SCRIPT_PATH}/libraries/footprints/"
 KICAD6_ESKD_3DMODEL_DIR="${SCRIPT_PATH}/libraries/3dmodels/"
@@ -112,6 +113,7 @@ if [ -f "${KICAD_COMMON_JSON}" ] ; then
   {
     "environment": {
       "vars": {
+        "KICAD6_ESKD_WORKSHEET_DIR": "${KICAD6_ESKD_WORKSHEET_DIR}",
         "KICAD6_ESKD_SYMBOL_DIR": "${KICAD6_ESKD_SYMBOL_DIR}",
         "KICAD6_ESKD_FOOTPRINT_DIR": "${KICAD6_ESKD_FOOTPRINT_DIR}",
         "KICAD6_ESKD_3DMODEL_DIR": "${KICAD6_ESKD_3DMODEL_DIR}"
