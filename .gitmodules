@@ -2,3 +2,7 @@
 	path = libraries
 	url = git@github.com:lipro-ecad/ESKD-kicad-libraries.git
 	branch = main
+[submodule "ESKD-kicad-templates"]
+	path = templates
+	url = git@github.com:lipro-ecad/ESKD-kicad-templates.git
+	branch = main
